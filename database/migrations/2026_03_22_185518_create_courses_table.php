@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('courses', function (Blueprint $table) {
+            $table->id();
+            $table->string('code'); // e.g., "COM401"
+            $table->string('title'); // e.g., "Software Engineering"
+            $table->integer('credit_hours')->default(3);
+            $table->enum('semester', [1, 2])->default(1);
+            $table->foreignId('academic_session_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+
+            $table->index(['code', 'academic_session_id']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('courses');
+    }
+};
